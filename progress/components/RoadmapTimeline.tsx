@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { CheckCircle2, Circle, Loader2, BookOpen, Check, Code2 } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { CheckCircle2, Circle, Loader2, BookOpen, Check, Code2, ChevronDown, ChevronUp } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { doc, onSnapshot, setDoc, collection } from "firebase/firestore";
 import { useAuth } from "@/context/AuthContext";
 import dsaRoadmap from "@/data/dsa-roadmap.json";
 import flutterRoadmap from "@/data/roadmap.json";
+import toast from "react-hot-toast";
 
 const roadmaps: Record<string, any[]> = {
   "dsa-roadmap": dsaRoadmap,
@@ -27,6 +28,18 @@ export function RoadmapTimeline({ roomId, roadmapId, usersCache }: RoadmapTimeli
 
   const roadmapData = roadmaps[roadmapId] || [];
   const completedDays = user ? (allProgress[user.uid] || []) : [];
+
+  const weeksData = useMemo(() => {
+    const weeks: Record<number, any[]> = {};
+    roadmapData.forEach((module: any) => {
+      const w = module.week || 1;
+      if (!weeks[w]) weeks[w] = [];
+      weeks[w].push(module);
+    });
+    return weeks;
+  }, [roadmapData]);
+
+  const [expandedWeeks, setExpandedWeeks] = useState<number[]>([1]);
 
   // Helper to parse practice string into LeetCode links
   const parsePractice = (practiceStr: string) => {
@@ -67,10 +80,16 @@ export function RoadmapTimeline({ roomId, roadmapId, usersCache }: RoadmapTimeli
     return () => unsubscribe();
   }, [roomId]);
 
-  const toggleDay = async (dayNumber: number) => {
+  const toggleWeek = (week: number) => {
+    setExpandedWeeks(prev => 
+      prev.includes(week) ? prev.filter(w => w !== week) : [...prev, week]
+    );
+  };
+
+  const toggleDay = async (module: any) => {
     if (!user) return;
     
-    // Optimistic update
+    const dayNumber = module.day;
     const isCompleted = completedDays.includes(dayNumber);
     const newCompletedDays = isCompleted 
       ? completedDays.filter(d => d !== dayNumber)
@@ -81,6 +100,25 @@ export function RoadmapTimeline({ roomId, roadmapId, usersCache }: RoadmapTimeli
       [user.uid]: newCompletedDays
     }));
 
+    if (!isCompleted) {
+      if (module.isProject) {
+        toast(`Milestone shipped 🎉`, { icon: '🚀', style: { background: '#ffd93d' } });
+      } else {
+        toast(`Nice — Day ${dayNumber} locked in.`, { icon: '🔥' });
+      }
+
+      // Check if week is completed with this action
+      const weekNum = module.week || 1;
+      const weekDays = weeksData[weekNum].map(d => d.day);
+      const isWeekNowCompleted = weekDays.every(d => newCompletedDays.includes(d));
+      if (isWeekNowCompleted) {
+        toast(`WEEK ${weekNum} COMPLETE 🔥`, { 
+          icon: '🏆',
+          style: { background: '#7bf1a8', color: 'black', border: '4px solid black', padding: '16px', fontSize: '1.2rem', fontWeight: 900 }
+        });
+      }
+    }
+
     // Save to Firestore
     const progressRef = doc(db, "rooms", roomId, "progress", user.uid);
     await setDoc(progressRef, { completedDays: newCompletedDays }, { merge: true });
@@ -88,8 +126,8 @@ export function RoadmapTimeline({ roomId, roadmapId, usersCache }: RoadmapTimeli
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full bg-white brutal-border brutal-shadow-lg">
-        <div className="w-12 h-12 brutal-border rounded-full border-t-[#ffe800] animate-spin"></div>
+      <div className="flex items-center justify-center h-full bg-[#f4f1e8] dark:bg-[#141414] brutal-border brutal-shadow-lg">
+        <div className="w-12 h-12 brutal-border rounded-full border-t-[#ffd93d] animate-spin"></div>
       </div>
     );
   }
@@ -97,10 +135,10 @@ export function RoadmapTimeline({ roomId, roadmapId, usersCache }: RoadmapTimeli
   const progressPercentage = Math.round((completedDays.length / roadmapData.length) * 100) || 0;
 
   return (
-    <div className="flex flex-col h-full bg-white brutal-border brutal-shadow-lg overflow-hidden max-h-[800px] relative">
+    <div className="flex flex-col relative w-full">
       
-      {/* Header */}
-      <div className="p-6 border-b-[4px] border-black bg-[#94dfff] sticky top-0 z-20">
+      {/* Global Progress Bar (Header) */}
+      <div className="p-6 brutal-border brutal-shadow-md bg-[#5ce1e6] sticky top-0 z-30 mb-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bitcount font-black uppercase tracking-widest text-black flex items-center gap-3">
             <div className="w-8 h-8 brutal-border bg-white flex items-center justify-center brutal-shadow-sm transform -rotate-6">
@@ -108,139 +146,235 @@ export function RoadmapTimeline({ roomId, roadmapId, usersCache }: RoadmapTimeli
             </div>
             Roadmap Progress
           </h2>
-          <span className="text-sm font-black text-black bg-[#c4ff4d] px-3 py-1 brutal-border brutal-shadow-sm transform rotate-2">
-            {progressPercentage}% Completed
+          <span className="text-sm font-black text-black bg-[#7bf1a8] px-3 py-1 brutal-border brutal-shadow-sm transform rotate-2">
+            {completedDays.length} / {roadmapData.length} Days
           </span>
         </div>
-        <div className="h-4 w-full bg-white brutal-border overflow-hidden">
+        <div className="h-6 w-full bg-white brutal-border overflow-hidden relative">
           <div 
             className="h-full bg-black transition-all duration-700" 
             style={{ width: `${progressPercentage}%` }}
           ></div>
+          <span className="absolute inset-0 flex items-center justify-center text-xs font-black uppercase text-white mix-blend-difference pointer-events-none">
+            {progressPercentage}% Completed
+          </span>
         </div>
       </div>
 
-      {/* Timeline */}
-      <div className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar bg-white">
-        {roadmapData.map((module: any, idx: number) => {
-          const isCompleted = completedDays.includes(module.day);
-          
-          const completedByUsers = Object.entries(allProgress)
-            .filter(([uid, days]) => days.includes(module.day))
-            .map(([uid]) => usersCache[uid])
-            .filter(Boolean);
-          
+      {/* Timeline grouped by Weeks */}
+      <div className="space-y-8 bg-transparent pb-16">
+        {Object.entries(weeksData).map(([weekStr, days]) => {
+          const weekNum = parseInt(weekStr);
+          const isExpanded = expandedWeeks.includes(weekNum);
+          const weekDaysCompleted = days.filter(d => completedDays.includes(d.day)).length;
+          const weekTotal = days.length;
+          const weekProgress = Math.round((weekDaysCompleted / weekTotal) * 100);
+          const isWeekCompleted = weekDaysCompleted === weekTotal;
+
           return (
-            <div key={idx} className="relative flex gap-8 group">
-              {/* Vertical line connecting nodes */}
-              {idx !== roadmapData.length - 1 && (
-                <div className={`absolute left-[17px] top-10 -bottom-10 w-[4px] ${isCompleted ? "bg-black" : "bg-black/20"}`}></div>
-              )}
-              
-              {/* Node */}
+            <div key={weekNum} className="mb-8">
+              {/* Week Header */}
               <div 
-                className="relative z-10 mt-2 cursor-pointer shrink-0" 
-                onClick={() => toggleDay(module.day)}
+                className={`flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 brutal-border cursor-pointer transition-all brutal-shadow-sm hover:brutal-shadow ${isWeekCompleted ? 'bg-[#7bf1a8] text-black' : 'bg-white text-black'}`}
+                onClick={() => toggleWeek(weekNum)}
               >
-                {isCompleted ? (
-                  <div className="w-10 h-10 rounded-none brutal-border bg-[#c4ff4d] flex items-center justify-center brutal-shadow transform hover:scale-110 transition-transform">
-                    <Check className="w-6 h-6 text-black" strokeWidth={4} />
-                  </div>
-                ) : (
-                  <div className="w-10 h-10 rounded-none brutal-border bg-white group-hover:bg-[#ffe800] transition-colors flex items-center justify-center brutal-shadow-sm hover:brutal-shadow"></div>
-                )}
-              </div>
-
-              {/* Content */}
-              <div 
-                className={`flex-1 p-6 brutal-border transition-all cursor-pointer brutal-shadow-sm hover:brutal-shadow ${
-                  isCompleted 
-                    ? "bg-[#c4ff4d]/20" 
-                    : "bg-white"
-                }`}
-                onClick={() => toggleDay(module.day)}
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex flex-col">
-                    <h3 className={`font-bitcount font-black uppercase tracking-wide text-2xl text-black`}>
-                      Day {module.day}: {module.title}
-                    </h3>
-                    
-                    {/* Avatars of people who completed it */}
-                    {completedByUsers.length > 0 && (
-                      <div className="flex items-center gap-2 mt-3">
-                        <div className="flex -space-x-2">
-                          {completedByUsers.map((u, i) => (
-                            u.photoURL ? (
-                              <img key={u.id || i} src={u.photoURL} alt={u.displayName} title={`${u.displayName} completed this`} className="w-8 h-8 rounded-none brutal-border object-cover" style={{ zIndex: 10 - i }} />
-                            ) : (
-                              <div key={u.id || i} title={`${u.displayName} completed this`} className="w-8 h-8 rounded-none brutal-border bg-[#ffb4d4] text-black flex items-center justify-center text-xs font-black" style={{ zIndex: 10 - i }}>
-                                {u.displayName?.charAt(0) || '?'}
-                              </div>
-                            )
-                          ))}
-                        </div>
-                        <span className="text-xs font-black uppercase bg-white border-[2px] border-black px-2 py-1 transform -rotate-2">completed</span>
-                      </div>
-                    )}
-                  </div>
-                  <span className="text-sm font-black uppercase tracking-widest text-black bg-[#ffe800] brutal-border px-3 py-1 transform rotate-2">
-                    Week {module.week}
-                  </span>
+                <div>
+                  <h2 className="text-2xl font-black uppercase tracking-wide flex items-center gap-2">
+                    Week {weekNum} {isWeekCompleted && <span className="text-sm bg-white border-2 border-black px-2 py-0.5 ml-2 transform -rotate-3">COMPLETED 🔥</span>}
+                  </h2>
+                  <p className="text-sm font-bold opacity-80 mt-1">{days[0]?.phase || 'Learning Phase'}</p>
                 </div>
-                
-                {module.topics?.length > 0 && (
-                  <div className="mt-6 flex flex-wrap gap-2 mb-4">
-                    {module.topics.map((topic: string, i: number) => (
-                      <div key={i} className={`text-sm font-black px-3 py-1.5 brutal-border uppercase ${isCompleted ? "bg-white text-black" : "bg-black text-white"}`}>
-                        {topic.replace(/`/g, '')}
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {module.practice && (
-                  <div className="bg-[#f0f0f0] p-5 brutal-border mt-4">
-                    <span className="text-sm font-black text-black uppercase tracking-widest flex items-center gap-2 mb-4 border-b-[2px] border-black pb-2">
-                      <Code2 className="w-5 h-5 text-black" strokeWidth={3} /> Practice Problems
-                    </span>
-                    <div className="flex flex-wrap gap-3">
-                      {parsePractice(module.practice).map(p => {
-                        if (p.type === 'lc') {
-                          const searchUrl = p.slug 
-                            ? `https://leetcode.com/problems/${p.slug}/description/?search=${p.num}`
-                            : `https://leetcode.com/problemset/?search=${p.num}`;
-                          return (
-                            <a key={p.id} href={searchUrl} target="_blank" rel="noopener noreferrer" 
-                               className="inline-flex items-center gap-2 px-3 py-2 bg-white brutal-border text-sm text-black hover:bg-[#ffb4d4] transition-colors brutal-shadow-sm active:brutal-shadow-none group/lc"
-                               onClick={(e) => e.stopPropagation()}>
-                              <span className="font-black">LC {p.num}</span>
-                              {p.text && <span className="font-bold">{p.text}</span>}
-                            </a>
-                          );
-                        }
-                        return (
-                          <span key={p.id} className="inline-block px-3 py-2 bg-white brutal-border text-sm font-bold text-black">
-                            {p.raw}
-                          </span>
-                        );
-                      })}
+                <div className="flex items-center gap-4 mt-4 sm:mt-0 w-full sm:w-auto">
+                  <div className="flex flex-col items-end gap-1 flex-1 sm:flex-none">
+                    <span className="text-xs font-black">{weekDaysCompleted}/{weekTotal} Days</span>
+                    <div className="w-full sm:w-32 h-3 bg-white brutal-border">
+                      <div className="h-full bg-black transition-all duration-500" style={{ width: `${weekProgress}%` }}></div>
                     </div>
                   </div>
-                )}
-                
-                {module.prompt && (
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActivePrompt({ day: module.day, text: module.prompt });
-                    }}
-                    className="mt-6 bg-[#94dfff] px-4 py-2 text-sm font-black uppercase tracking-wide text-black brutal-btn"
-                  >
-                    View Prompt
-                  </button>
-                )}
+                  {isExpanded ? <ChevronUp className="w-6 h-6" strokeWidth={3} /> : <ChevronDown className="w-6 h-6" strokeWidth={3} />}
+                </div>
               </div>
+
+              {/* Days Grid */}
+              {isExpanded && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                  {days.map((module: any) => {
+                    const isCompleted = completedDays.includes(module.day);
+                    const completedByUsers = Object.entries(allProgress)
+                      .filter(([uid, d]) => d.includes(module.day))
+                      .map(([uid]) => usersCache[uid])
+                      .filter(Boolean);
+
+                    // Prompt button accent cycles: yellow → pink → cyan → green → purple
+                    const promptColors = ['#ffd93d', '#ff90e8', '#5ce1e6', '#7bf1a8', '#c084fc'];
+                    const promptAccent = promptColors[(module.day - 1) % promptColors.length];
+
+                    // Parse a topic string: "Bold Part, subtitle part" → { main, sub }
+                    const parseTopic = (t: string) => {
+                      const clean = t.replace(/`/g, '');
+                      // Split on first comma only if the topic has multiple comma segments
+                      const commaIdx = clean.indexOf(',');
+                      if (commaIdx !== -1) {
+                        return { main: clean.slice(0, commaIdx).trim(), sub: clean.slice(commaIdx + 1).trim() };
+                      }
+                      // Split on first opening parenthesis
+                      const parenIdx = clean.indexOf('(');
+                      if (parenIdx !== -1) {
+                        return { main: clean.slice(0, parenIdx).trim(), sub: clean.slice(parenIdx).trim() };
+                      }
+                      return { main: clean, sub: '' };
+                    };
+
+                    return (
+                      <div 
+                        key={module.day} 
+                        className={`group cursor-pointer relative flex flex-col transition-all duration-150 hover:-translate-y-1 active:translate-y-0.5 overflow-hidden ${module.isProject ? 'md:col-span-2' : ''} ${isCompleted ? 'bg-[#dff6e3]' : 'bg-white'}`}
+                        style={{ border: '3px solid #14110d', boxShadow: '5px 5px 0 0 #14110d' }}
+                        onClick={() => toggleDay(module)}
+                      >
+                        {isCompleted && (
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
+                            <span 
+                              className="text-4xl font-black uppercase tracking-wider text-black px-6 py-2 transform -rotate-[15deg] inline-block whitespace-nowrap"
+                              style={{ backgroundColor: '#7bf1a8', border: '4px solid #14110d', boxShadow: '6px 6px 0 0 #14110d' }}
+                            >
+                              ✓ DONE
+                            </span>
+                          </div>
+                        )}
+                        <div className={`p-5 flex flex-col flex-1 transition-all ${isCompleted ? 'opacity-30 grayscale' : ''}`}>
+
+                          {/* ── HEADER: DAY box + title ── */}
+                          <div className="flex items-start gap-4 mb-4">
+                            <div 
+                              className="flex flex-col items-center justify-center shrink-0 px-3 py-2"
+                              style={{ border: '3px solid #14110d', minWidth: '54px', backgroundColor: isCompleted ? '#7bf1a8' : 'transparent' }}
+                            >
+                              <span className="text-[9px] font-black uppercase tracking-widest leading-none text-black">DAY</span>
+                              <span className="text-[1.7rem] font-black leading-none text-black">{module.day}</span>
+                            </div>
+                            <div className="flex flex-col justify-center pt-0.5 flex-1 min-w-0">
+                              <h3 className={`font-black uppercase text-[1.05rem] leading-snug text-black ${isCompleted ? 'line-through decoration-[2px]' : ''}`}>
+                                {module.title}
+                              </h3>
+                              {module.isProject && (
+                                <span className="text-[9px] font-black uppercase tracking-widest mt-1" style={{ color: '#e040fb' }}>
+                                  🚀 BUILD PROJECT
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* ── DIVIDER ── */}
+                          <div className="border-t-[2px] border-black/15 mb-3" />
+
+                          {/* ── TOPICS LIST ── */}
+                          {module.topics?.length > 0 && (
+                            <div className="flex-1 mb-3">
+                              {module.topics.map((topic: string, i: number) => {
+                                const { main, sub } = parseTopic(topic);
+                                return (
+                                  <div key={i}>
+                                    <div className="flex items-start gap-2.5 py-2">
+                                      <span className={`text-[9px] text-black mt-[3px] shrink-0 font-black select-none ${isCompleted ? 'opacity-40' : ''}`}>■</span>
+                                      <div>
+                                        <span className={`text-[12px] font-bold text-black leading-snug ${isCompleted ? 'line-through opacity-60' : ''}`}>{main}</span>
+                                        {sub && (
+                                          <p className={`text-[11px] leading-snug mt-0.5 ${isCompleted ? 'line-through opacity-40' : ''}`} style={{ color: isCompleted ? 'inherit' : 'rgba(0,0,0,0.45)' }}>{sub}</p>
+                                        )}
+                                      </div>
+                                    </div>
+                                    {i < module.topics.length - 1 && (
+                                      <div className="border-t border-black/8" />
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          )}
+
+                          {/* ── PRACTICE ── */}
+                          {module.practice && (
+                            <>
+                              <div className="border-t-[2px] border-black/15 mb-3" />
+                              <div className="mb-4">
+                                <p className="text-[11px] font-black uppercase tracking-widest text-black mb-2">
+                                  PRACTICE
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                  {parsePractice(module.practice).map(p => {
+                                    if (p.type === 'lc') {
+                                      const searchUrl = p.slug 
+                                        ? `https://leetcode.com/problems/${p.slug}/description/?search=${p.num}`
+                                        : `https://leetcode.com/problemset/?search=${p.num}`;
+                                      return (
+                                        <a 
+                                          key={p.id} 
+                                          href={searchUrl} 
+                                          target="_blank" 
+                                          rel="noopener noreferrer" 
+                                          className="inline-flex items-center px-3 py-1 text-[11px] font-bold text-black bg-white hover:bg-[#ff90e8] transition-colors"
+                                          style={{ border: '2px solid #14110d' }}
+                                          onClick={(e) => e.stopPropagation()}
+                                        >
+                                          LC {p.num}
+                                        </a>
+                                      );
+                                    }
+                                    return (
+                                      <span key={p.id} className="inline-block px-3 py-1 bg-white text-[11px] font-bold text-black" style={{ border: '2px solid #14110d' }}>
+                                        {p.raw}
+                                      </span>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            </>
+                          )}
+
+                          {/* ── BOTTOM ROW: avatars + prompt button ── */}
+                          <div className="flex items-center justify-between gap-2 mt-auto">
+                            {completedByUsers.length > 0 ? (
+                              <div className="flex items-center gap-1.5">
+                                <div className="flex -space-x-1.5">
+                                  {completedByUsers.map((u, i) => (
+                                    u.photoURL ? (
+                                      <img key={u.id || i} src={u.photoURL} alt={u.displayName} title={`${u.displayName} completed this`} className="w-5 h-5 object-cover" style={{ border: '2px solid #14110d', zIndex: 10 - i }} />
+                                    ) : (
+                                      <div key={u.id || i} title={`${u.displayName} completed this`} className="w-5 h-5 bg-[#ff90e8] text-black flex items-center justify-center text-[9px] font-black" style={{ border: '2px solid #14110d', zIndex: 10 - i }}>
+                                        {u.displayName?.charAt(0) || '?'}
+                                      </div>
+                                    )
+                                  ))}
+                                </div>
+                                <span className="text-[9px] font-black uppercase opacity-40">done</span>
+                              </div>
+                            ) : <div />}
+
+                            {module.prompt && (
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setActivePrompt({ day: module.day, text: module.prompt });
+                                }}
+                                className="flex items-center gap-1.5 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-black transition-all active:shadow-none active:translate-y-0.5"
+                                style={{ 
+                                  backgroundColor: promptAccent,
+                                  border: '3px solid #14110d',
+                                  boxShadow: '3px 3px 0 0 #14110d'
+                                }}
+                              >
+                                ⚡ PROMPT
+                              </button>
+                            )}
+                          </div>
+
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })}
@@ -267,18 +401,18 @@ function PromptModal({ day, text, onClose }: { day: number; text: string; onClos
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm" onClick={onClose}>
-      <div className="relative flex max-h-[90vh] w-full max-w-2xl flex-col brutal-border bg-white brutal-shadow-lg transform rotate-1" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between border-b-[4px] border-black bg-[#ffe800] p-5">
+      <div className="relative flex max-h-[90vh] w-full max-w-2xl flex-col brutal-border bg-[#f4f1e8] dark:bg-[#141414] brutal-shadow-lg transform rotate-1" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between border-b-4 border-black bg-[#ffd93d] p-5">
           <h2 className="text-xl font-black text-black uppercase">AI Prompt — Day {day}</h2>
           <button onClick={onClose} className="w-8 h-8 brutal-border bg-white hover:bg-red-500 hover:text-white transition-colors flex items-center justify-center font-black">✕</button>
         </div>
-        <div className="flex-1 overflow-y-auto p-6 text-black custom-scrollbar bg-white">
+        <div className="flex-1 overflow-y-auto p-6 text-black custom-scrollbar bg-[#f4f1e8] dark:bg-[#141414]">
           <p className="mb-4 text-sm font-bold uppercase tracking-wide">Copy this prompt into ChatGPT or Claude to learn today's concepts.</p>
           <div className="brutal-border bg-[#f0f0f0] p-5">
             <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed font-bold">{text}</pre>
           </div>
         </div>
-        <div className="border-t-[4px] border-black p-5 bg-[#c4ff4d]">
+        <div className="border-t-4 border-black p-5 bg-[#7bf1a8]">
           <button onClick={copyToClipboard} className="w-full bg-white text-black px-4 py-3 text-lg font-black uppercase brutal-btn">
             {copied ? "Copied! 🚀" : "Copy to Clipboard"}
           </button>

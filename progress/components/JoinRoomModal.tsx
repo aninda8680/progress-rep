@@ -87,7 +87,7 @@ export function JoinRoomModal({ isOpen, onClose, onSuccess }: JoinRoomModalProps
       ></div>
       
       <div className="relative w-full max-w-md bg-white brutal-border brutal-shadow-lg overflow-hidden transform -rotate-1">
-        <div className="flex items-center justify-between p-6 border-b-[4px] border-black bg-[#94dfff]">
+        <div className="flex items-center justify-between p-6 border-b-4 border-black bg-[#5ce1e6]">
           <h2 className="text-2xl font-black text-black uppercase tracking-tight">Join a Room</h2>
           <button 
             onClick={onClose}
@@ -99,7 +99,7 @@ export function JoinRoomModal({ isOpen, onClose, onSuccess }: JoinRoomModalProps
 
         <form onSubmit={handleSubmit} className="p-8">
           {error && (
-            <div className="flex items-start gap-3 p-4 mb-6 text-sm text-black bg-[#ff9c9c] brutal-border brutal-shadow-sm font-bold">
+            <div className="flex items-start gap-3 p-4 mb-6 text-sm text-black bg-[#c084fc] brutal-border brutal-shadow-sm font-bold">
               <Info className="w-5 h-5 mt-0.5 shrink-0" strokeWidth={3} />
               <p>{error}</p>
             </div>
@@ -126,7 +126,7 @@ export function JoinRoomModal({ isOpen, onClose, onSuccess }: JoinRoomModalProps
             </p>
           </div>
 
-          <div className="flex justify-end gap-4 border-t-[3px] border-black pt-6">
+          <div className="flex justify-end gap-4 border-t-4 border-black pt-6">
             <button
               type="button"
               onClick={onClose}
@@ -137,7 +137,7 @@ export function JoinRoomModal({ isOpen, onClose, onSuccess }: JoinRoomModalProps
             <button
               type="submit"
               disabled={loading || !isValidFormat}
-              className="flex items-center justify-center gap-2 px-6 py-3 bg-[#ffe800] disabled:opacity-50 text-black font-black uppercase tracking-wide brutal-btn"
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-[#ffd93d] disabled:opacity-50 text-black font-black uppercase tracking-wide brutal-btn"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" strokeWidth={3} />

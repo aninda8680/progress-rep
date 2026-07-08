@@ -18,18 +18,18 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="w-12 h-12 brutal-border rounded-full border-t-[#ffe800] animate-spin"></div>
+      <div className="flex items-center justify-center min-h-screen bg-transparent">
+        <div className="w-12 h-12 brutal-border rounded-full border-t-[#ffd93d] animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <main className="flex flex-col min-h-screen bg-background text-foreground font-sans selection:bg-[#ffb4d4] overflow-hidden relative">
-      <div className="min-h-screen flex flex-col">
-        <nav className="w-full flex items-center justify-between px-6 py-6 max-w-7xl mx-auto z-50 brutal-border-b border-b-[3px] border-black bg-[#ffb4d4]">
+    <main className="flex flex-col min-h-[125vh] bg-transparent text-foreground font-sans selection:bg-[#ff90e8] overflow-hidden relative">
+      <div className="min-h-[125vh] flex flex-col">
+        <nav className="w-full flex items-center justify-between px-6 py-6 max-w-7xl mx-auto z-50 brutal-border-b border-b-4 border-black bg-[#ff90e8]">
           <div className="flex items-center gap-2 flex-1">
-            <div className="w-8 h-8 brutal-border bg-[#ffe800] flex items-center justify-center transform -rotate-6">
+            <div className="w-8 h-8 brutal-border bg-[#ffd93d] flex items-center justify-center transform -rotate-6">
                <div className="w-3 h-3 bg-black rounded-full"></div>
             </div>
             <span className="font-bold text-lg tracking-widest uppercase text-black font-bitcount">PORTLINE</span>
@@ -48,7 +48,7 @@ export default function Home() {
             </Link>
             <Link
               href="/login"
-              className="px-5 py-2.5 text-sm font-bold bg-[#ffe800] text-black brutal-btn inline-flex items-center gap-2 uppercase tracking-wide"
+              className="px-5 py-2.5 text-sm font-bold bg-[#ffd93d] text-black brutal-btn inline-flex items-center gap-2 uppercase tracking-wide"
             >
               Start learning
               <ArrowRight className="w-4 h-4" />
@@ -57,7 +57,7 @@ export default function Home() {
         </nav>
 
         <section className="px-6 flex-1 flex flex-col items-center justify-center max-w-250 mx-auto w-full text-center relative z-10 py-20">
-          <div className="group inline-flex items-center gap-3 px-4 py-2 brutal-border bg-[#c4ff4d] text-black text-sm font-bold mb-10 brutal-shadow-sm cursor-pointer hover:bg-[#b0f030]">
+          <div className="group inline-flex items-center gap-3 px-4 py-2 brutal-border bg-[#7bf1a8] text-black text-sm font-bold mb-10 brutal-shadow-sm cursor-pointer hover:bg-[#b0f030]">
             <span className="flex items-center justify-center bg-black text-white text-[10px] uppercase font-bold tracking-widest px-3 py-1 brutal-border">
               Beta
             </span>
@@ -67,7 +67,7 @@ export default function Home() {
           
           <h1 className="text-6xl md:text-[7rem] font-black tracking-tighter mb-8 leading-[1] text-black uppercase drop-shadow-[4px_4px_0_rgba(0,0,0,1)] text-white" style={{ WebkitTextStroke: "2px black" }}>
             Master any skill.<br />
-            <span className="bg-[#ffb4d4] px-4 text-black" style={{ WebkitTextStroke: "0" }}>Together.</span>
+            <span className="bg-[#ff90e8] px-4 text-black" style={{ WebkitTextStroke: "0" }}>Together.</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-black font-bold max-w-2xl mb-12 leading-relaxed border-l-8 border-black pl-6 text-left mx-auto">
@@ -78,7 +78,7 @@ export default function Home() {
           <div className="flex items-center gap-6 flex-col sm:flex-row w-full sm:w-auto justify-center mt-4">
             <Link
               href="/login"
-              className="w-full sm:w-auto px-10 py-5 text-lg font-black bg-[#ffe800] text-black brutal-btn uppercase tracking-widest"
+              className="w-full sm:w-auto px-10 py-5 text-lg font-black bg-[#ffd93d] text-black brutal-btn uppercase tracking-widest"
             >
               Get started for free
             </Link>
@@ -89,7 +89,7 @@ export default function Home() {
         </section>
       </div>
 
-      <section id="features" className="py-32 border-t-[4px] border-black bg-[#c4ff4d]">
+      <section id="features" className="py-32 border-t-4 border-black bg-[#7bf1a8]">
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-24 text-left max-w-3xl brutal-border bg-white p-8 brutal-shadow-lg transform -rotate-1">
             <h2 className="text-4xl md:text-6xl font-black mb-6 text-black tracking-tighter leading-[1] uppercase">The ultimate standard in collaborative learning.</h2>
@@ -98,7 +98,7 @@ export default function Home() {
 
           <div className="grid md:grid-cols-3 gap-8">
             <FeatureCard 
-              color="bg-[#ffb4d4]"
+              color="bg-[#ff90e8]"
               icon={<Activity className="w-8 h-8 text-black" />}
               title="Real-time Sync"
               description="Progress updates are broadcasted instantly to all members in your study group via Firestore infrastructure."
@@ -110,7 +110,7 @@ export default function Home() {
               description="Deploy curated curriculums like DSA or System Design, directly integrated into your room's timeline."
             />
             <FeatureCard 
-              color="bg-[#ffe800]"
+              color="bg-[#ffd93d]"
               icon={<Lock className="w-8 h-8 text-black" />}
               title="Secure Enclaves"
               description="Granular database security rules ensure only invited members can view or mutate room state."
@@ -122,7 +122,7 @@ export default function Home() {
               description="Visualize your consistency with GitHub-style contribution graphs synced to your actual progress."
             />
             <FeatureCard 
-              color="bg-[#94dfff]"
+              color="bg-[#5ce1e6]"
               icon={<Users className="w-8 h-8 text-black" />}
               title="Multiplayer First"
               description="Built from the ground up for teams. See exactly who completed what, and when."
@@ -137,7 +137,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-40 border-t-[4px] border-black bg-[#ffb4d4] relative overflow-hidden">
+      <section className="py-40 border-t-4 border-black bg-[#ff90e8] relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <h2 className="text-6xl md:text-8xl font-black text-black mb-8 tracking-tighter leading-[1] uppercase">Begin your<br/>journey.</h2>
           <p className="text-black text-2xl font-bold mb-12 max-w-2xl mx-auto bg-white brutal-border p-6 transform rotate-1 brutal-shadow">
@@ -145,19 +145,19 @@ export default function Home() {
           </p>
           <Link
             href="/login"
-            className="inline-flex items-center justify-center px-12 py-6 text-xl font-black bg-[#ffe800] text-black brutal-btn uppercase tracking-widest"
+            className="inline-flex items-center justify-center px-12 py-6 text-xl font-black bg-[#ffd93d] text-black brutal-btn uppercase tracking-widest"
           >
             Start learning for free
           </Link>
         </div>
       </section>
 
-      <footer className="border-t-[4px] border-black py-16 bg-white">
+      <footer className="border-t-4 border-black py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-3 mb-6">
                <div className="w-8 h-8 brutal-border bg-black flex items-center justify-center transform rotate-6">
-                  <div className="w-3 h-3 bg-[#ffe800] rounded-none"></div>
+                  <div className="w-3 h-3 bg-[#ffd93d] rounded-none"></div>
                </div>
               <span className="font-bold text-xl tracking-widest uppercase text-black font-bitcount">PORTLINE</span>
             </div>
@@ -188,9 +188,9 @@ export default function Home() {
             </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t-[4px] border-black flex justify-between items-center text-sm text-black font-bold uppercase tracking-widest flex-col md:flex-row gap-4">
+        <div className="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t-4 border-black flex justify-between items-center text-sm text-black font-bold uppercase tracking-widest flex-col md:flex-row gap-4">
           <p>© {new Date().getFullYear()} Portline. All rights reserved.</p>
-          <div className="bg-[#c4ff4d] px-4 py-2 brutal-border brutal-shadow-sm font-bitcount">
+          <div className="bg-[#7bf1a8] px-4 py-2 brutal-border brutal-shadow-sm font-bitcount">
             SYSTEM ONLINE
           </div>
         </div>

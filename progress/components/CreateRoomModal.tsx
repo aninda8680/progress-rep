@@ -107,7 +107,7 @@ export function CreateRoomModal({ isOpen, onClose, onSuccess }: CreateRoomModalP
       ></div>
       
       <div className="relative w-full max-w-md bg-white brutal-border brutal-shadow-lg overflow-hidden transform rotate-1">
-        <div className="flex items-center justify-between p-6 border-b-[4px] border-black bg-[#ffe800]">
+        <div className="flex items-center justify-between p-6 border-b-4 border-black bg-[#ffd93d]">
           <h2 className="text-2xl font-black text-black uppercase tracking-tight">
             {step === 1 ? "Create a Room" : "Room Created!"}
           </h2>
@@ -122,7 +122,7 @@ export function CreateRoomModal({ isOpen, onClose, onSuccess }: CreateRoomModalP
         {step === 1 ? (
           <form onSubmit={handleCreate} className="p-8">
             {error && (
-              <div className="flex items-start gap-3 p-4 mb-6 text-sm text-black bg-[#ff9c9c] brutal-border brutal-shadow-sm font-bold">
+              <div className="flex items-start gap-3 p-4 mb-6 text-sm text-black bg-[#c084fc] brutal-border brutal-shadow-sm font-bold">
                 <Info className="w-5 h-5 mt-0.5 shrink-0" strokeWidth={3} />
                 <p>{error}</p>
               </div>
@@ -134,7 +134,7 @@ export function CreateRoomModal({ isOpen, onClose, onSuccess }: CreateRoomModalP
                   <label htmlFor="roomName" className="block text-lg font-black text-black uppercase tracking-wide">
                     Room Name
                   </label>
-                  <span className={`text-sm font-black ${isOverLimit ? 'text-[#ff9c9c]' : 'text-black'}`}>
+                  <span className={`text-sm font-black ${isOverLimit ? 'text-[#c084fc]' : 'text-black'}`}>
                     {name.length} / {MAX_CHARS}
                   </span>
                 </div>
@@ -163,8 +163,8 @@ export function CreateRoomModal({ isOpen, onClose, onSuccess }: CreateRoomModalP
                       onClick={() => setSelectedRoadmap(roadmap.id)}
                       className={`flex items-center gap-4 p-4 brutal-border cursor-pointer transition-all brutal-shadow-sm ${
                         selectedRoadmap === roadmap.id 
-                          ? "bg-[#c4ff4d] transform translate-x-1" 
-                          : "bg-white hover:bg-[#c4ff4d]/20 hover:translate-x-1"
+                          ? "bg-[#7bf1a8] transform translate-x-1" 
+                          : "bg-white hover:bg-[#7bf1a8]/20 hover:translate-x-1"
                       }`}
                     >
                       <div className="shrink-0 w-12 h-12 brutal-border bg-white flex items-center justify-center transform -rotate-3">{roadmap.icon}</div>
@@ -182,7 +182,7 @@ export function CreateRoomModal({ isOpen, onClose, onSuccess }: CreateRoomModalP
               </div>
             </div>
 
-            <div className="mt-8 flex justify-end gap-4 border-t-[3px] border-black pt-6">
+            <div className="mt-8 flex justify-end gap-4 border-t-4 border-black pt-6">
               <button
                 type="button"
                 onClick={onClose}
@@ -193,7 +193,7 @@ export function CreateRoomModal({ isOpen, onClose, onSuccess }: CreateRoomModalP
               <button
                 type="submit"
                 disabled={loading || isOverLimit || isEmpty || !selectedRoadmap}
-                className="flex items-center justify-center gap-2 px-6 py-3 bg-[#ffb4d4] disabled:opacity-50 text-black font-black uppercase tracking-wide brutal-btn"
+                className="flex items-center justify-center gap-2 px-6 py-3 bg-[#ff90e8] disabled:opacity-50 text-black font-black uppercase tracking-wide brutal-btn"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" strokeWidth={3} />
@@ -208,7 +208,7 @@ export function CreateRoomModal({ isOpen, onClose, onSuccess }: CreateRoomModalP
           </form>
         ) : (
           <div className="p-10 text-center bg-white">
-            <div className="w-20 h-20 bg-[#c4ff4d] brutal-border flex items-center justify-center mx-auto mb-6 brutal-shadow transform rotate-3">
+            <div className="w-20 h-20 bg-[#7bf1a8] brutal-border flex items-center justify-center mx-auto mb-6 brutal-shadow transform rotate-3">
               <CheckCircle2 className="w-10 h-10 text-black" strokeWidth={3} />
             </div>
             
@@ -217,14 +217,14 @@ export function CreateRoomModal({ isOpen, onClose, onSuccess }: CreateRoomModalP
               Share this code with your study group so they can join your room.
             </p>
 
-            <div className="bg-[#94dfff] brutal-border p-4 flex items-center justify-between mb-8 brutal-shadow-sm transform -rotate-1">
+            <div className="bg-[#5ce1e6] brutal-border p-4 flex items-center justify-between mb-8 brutal-shadow-sm transform -rotate-1">
               <div className="flex items-center gap-3 overflow-hidden">
                 <LinkIcon className="w-6 h-6 text-black shrink-0" strokeWidth={3} />
                 <code className="text-black font-mono font-black text-lg truncate select-all">{createdRoomId}</code>
               </div>
               <button 
                 onClick={copyToClipboard}
-                className="ml-3 p-3 bg-white brutal-border hover:bg-[#ffe800] transition-colors shrink-0 brutal-shadow-sm active:brutal-shadow-none"
+                className="ml-3 p-3 bg-white brutal-border hover:bg-[#ffd93d] transition-colors shrink-0 brutal-shadow-sm active:brutal-shadow-none"
               >
                 {copied ? <CheckCircle2 className="w-5 h-5 text-black" strokeWidth={3} /> : <Copy className="w-5 h-5 text-black" strokeWidth={3} />}
               </button>

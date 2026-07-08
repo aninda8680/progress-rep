@@ -18,14 +18,14 @@ export default function LoginPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#94dfff]">
-        <div className="w-12 h-12 brutal-border rounded-full border-t-[#ffe800] animate-spin"></div>
+      <div className="flex items-center justify-center min-h-screen bg-[#5ce1e6]">
+        <div className="w-12 h-12 brutal-border rounded-full border-t-[#ffd93d] animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#94dfff] flex flex-col font-sans text-black selection:bg-[#ffb4d4]">
+    <div className="min-h-screen bg-[#5ce1e6] flex flex-col font-sans text-black selection:bg-[#ff90e8]">
       {/* Top Nav Minimal */}
       <nav className="w-full px-6 py-6 absolute top-0 left-0">
         <Link href="/" className="inline-flex items-center gap-2 text-lg font-black uppercase text-black hover:underline decoration-4 underline-offset-4 transition-all">
@@ -38,7 +38,7 @@ export default function LoginPage() {
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-md brutal-border bg-white p-10 relative brutal-shadow-lg transform rotate-1">
           <div className="flex flex-col items-center text-center mb-10">
-            <div className="w-16 h-16 brutal-border bg-[#ffe800] flex items-center justify-center mb-6 brutal-shadow-sm transform -rotate-3">
+            <div className="w-16 h-16 brutal-border bg-[#ffd93d] flex items-center justify-center mb-6 brutal-shadow-sm transform -rotate-3">
               <LayoutDashboard className="w-8 h-8 text-black" strokeWidth={2.5} />
             </div>
             <h1 className="text-4xl font-black text-black mb-3 tracking-tighter uppercase">Welcome to Portline</h1>
@@ -48,7 +48,7 @@ export default function LoginPage() {
           <div className="space-y-4">
             <button
               onClick={signInWithGoogle}
-              className="w-full relative group flex items-center justify-center gap-4 px-6 py-4 bg-[#ffb4d4] brutal-btn brutal-shadow-sm active:brutal-shadow-none"
+              className="w-full relative group flex items-center justify-center gap-4 px-6 py-4 bg-[#ff90e8] brutal-btn brutal-shadow-sm active:brutal-shadow-none"
             >
               {/* Google Icon SVG */}
               <svg className="w-6 h-6" viewBox="0 0 24 24">
@@ -73,7 +73,7 @@ export default function LoginPage() {
             </button>
           </div>
           
-          <div className="mt-8 pt-8 border-t-[3px] border-black">
+          <div className="mt-8 pt-8 border-t-4 border-black">
             <p className="text-center text-sm text-black font-bold uppercase">
               By continuing, you agree to our Terms of Service and Privacy Policy.
             </p>

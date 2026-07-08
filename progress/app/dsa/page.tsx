@@ -233,12 +233,18 @@ function DayCard({
   return (
     <div
       onClick={() => onToggle(day, week)}
-      className={`group cursor-pointer relative flex flex-col items-start gap-3 border-4 border-black p-5 text-left transition-all duration-200 
+      className={`group cursor-pointer relative flex flex-col items-start gap-3 border-4 border-black p-5 text-left transition-all duration-200 overflow-hidden
         hover:-translate-y-1 hover:shadow-[8px_8px_0_0_#14110d] dark:hover:shadow-[8px_8px_0_0_rgba(255,255,255,0.2)] hover:-rotate-1 active:translate-y-1 active:shadow-none
-        ${checked ? "bg-[#e8f5e9] text-black opacity-90 shadow-none translate-y-1" : "bg-white text-black shadow-[4px_4px_0_0_#14110d] dark:shadow-[4px_4px_0_0_rgba(255,255,255,0.2)]"}
+        ${checked ? "bg-[#e8f5e9] text-black shadow-none translate-y-1" : "bg-white text-black shadow-[4px_4px_0_0_#14110d] dark:shadow-[4px_4px_0_0_rgba(255,255,255,0.2)]"}
       `}
     >
-      <div className="flex w-full items-start gap-4">
+      {checked && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-[15deg] border-8 border-red-500 text-red-500 px-6 py-2 font-black uppercase text-5xl opacity-90 pointer-events-none z-20 whitespace-nowrap bg-white/90 shadow-[4px_4px_0_0_rgba(239,68,68,0.2)]">
+          DONE
+        </div>
+      )}
+      
+      <div className={`flex w-full items-start gap-4 z-10 transition-opacity ${checked ? "opacity-30 grayscale" : ""}`}>
         <Check checked={checked} accent="#7bf1a8" />
         <div className="flex-1">
           <span className="text-sm font-black uppercase tracking-widest text-black/60 bg-black/5 px-1 inline-block mb-1">
@@ -246,22 +252,17 @@ function DayCard({
           </span>
           <h3
             className={`text-xl font-black leading-tight ${
-              checked ? "line-through decoration-4 opacity-60" : ""
+              checked ? "line-through decoration-4" : ""
             }`}
           >
             {day.title}
           </h3>
         </div>
-        {checked && (
-          <div className="absolute right-4 top-4 rotate-[15deg] border-4 border-red-500 text-red-500 px-2 font-black uppercase text-xl opacity-80 pointer-events-none">
-            DONE
-          </div>
-        )}
       </div>
 
-      <div className="pl-12 w-full">
+      <div className={`pl-12 w-full z-10 transition-opacity ${checked ? "opacity-30 grayscale pointer-events-none" : ""}`}>
         {day.practice && (
-          <div className={`text-base font-semibold border-l-4 border-black/20 pl-3 ${checked ? "opacity-60" : ""}`}>
+          <div className={`text-base font-semibold border-l-4 border-black/20 pl-3`}>
             Practice: {day.practice}
           </div>
         )}

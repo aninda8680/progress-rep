@@ -204,24 +204,16 @@ export default function Dashboard() {
   const selectedRoom = rooms.find(r => r.id === selectedRoomId);
 
   // Neo brutalist background color palette for rooms
-  const roomColors = ["bg-[#ffb4d4]", "bg-[#94dfff]", "bg-[#c4ff4d]", "bg-[#ffe800]", "bg-[#ff9c9c]"];
+  const roomColors = ["bg-[#ff90e8]", "bg-[#5ce1e6]", "bg-[#7bf1a8]", "bg-[#ffd93d]", "bg-[#c084fc]"];
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans selection:bg-[#ffb4d4] overflow-hidden relative">
-      <div className="p-8 max-w-[1600px] mx-auto relative z-10 h-screen flex flex-col">
-        <header className="mb-8 shrink-0">
-          <h1 className="text-4xl md:text-5xl font-bitcount font-black text-black uppercase tracking-tight brutal-shadow-sm inline-block bg-[#ffe800] border-[3px] border-black px-4 py-2 transform -rotate-1">
-            Welcome back, {user?.displayName?.split(" ")[0] || "there"}
-          </h1>
-          <p className="text-black mt-4 font-bold text-lg max-w-xl">
-            Here's what's happening in your study groups. Time to crush those goals!
-          </p>
-        </header>
+    <div className="min-h-[125vh] bg-transparent text-foreground font-sans selection:bg-[#ff90e8] overflow-hidden relative">
+      <div className="p-4 sm:p-8 max-w-[1600px] mx-auto relative z-10 h-[125vh] flex flex-col">
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 flex-1 min-h-0">
           {/* Column 1: Rooms Navigation */}
           <div className="col-span-1 space-y-6 overflow-y-auto pr-2 custom-scrollbar flex flex-col">
-            <h2 className="text-xl font-bitcount font-black uppercase tracking-widest text-black flex items-center gap-3 shrink-0 bg-[#c4ff4d] border-[3px] border-black p-2 brutal-shadow-sm self-start">
+            <h2 className="text-xl font-bitcount font-black uppercase tracking-widest text-black flex items-center gap-3 shrink-0 bg-[#7bf1a8] border-4 border-black p-2 brutal-shadow-sm self-start">
               <FolderOpen className="w-5 h-5 text-black" strokeWidth={3} />
               Your Rooms
             </h2>
@@ -279,16 +271,16 @@ export default function Dashboard() {
                         </button>
                       </div>
                       
-                      <div className="flex items-center justify-between mt-4 border-t-[3px] border-black pt-4">
+                      <div className="flex items-center justify-between mt-4 border-t-4 border-black pt-4">
                         <div className="flex items-center -space-x-2 group/members relative cursor-help">
                           {room.members?.slice(0, 4).map((mId, index) => {
                             const u = usersCache[mId];
                             return (
-                              <div key={mId} className="w-8 h-8 rounded-none brutal-border bg-white flex items-center justify-center overflow-hidden relative hover:z-20 hover:-translate-y-1 transition-transform brutal-shadow-sm" style={{ zIndex: 10 - index }}>
+                              <div key={mId} className="w-8 h-8 rounded-none bg-white flex items-center justify-center overflow-hidden relative hover:z-20 hover:-translate-y-1 transition-transform" style={{ zIndex: 10 - index }}>
                                 {u?.photoURL ? (
                                   <img src={u.photoURL} alt="avatar" className="w-full h-full object-cover" />
                                 ) : (
-                                  <span className="text-xs font-black text-black bg-[#94dfff] w-full h-full flex items-center justify-center">
+                                  <span className="text-xs font-black text-black bg-[#5ce1e6] w-full h-full flex items-center justify-center">
                                     {u?.displayName?.charAt(0).toUpperCase() || '?'}
                                   </span>
                                 )}
@@ -296,23 +288,23 @@ export default function Dashboard() {
                             )
                           })}
                           {(room.members?.length || 0) > 4 && (
-                            <div className="w-8 h-8 rounded-none brutal-border bg-[#ffe800] flex items-center justify-center z-[5] text-xs font-black text-black brutal-shadow-sm">
+                            <div className="w-8 h-8 rounded-none bg-[#ffd93d] flex items-center justify-center z-[5] text-xs font-black text-black">
                               +{(room.members?.length || 0) - 4}
                             </div>
                           )}
                           
                           {/* Tooltip on hover */}
                           <div className="absolute left-0 bottom-full mb-3 hidden group-hover/members:flex flex-col bg-white brutal-border brutal-shadow-lg p-2 z-50 w-56">
-                            <div className="text-xs font-black text-black uppercase tracking-wider mb-2 px-2 pt-1 border-b-[2px] border-black pb-1">Members ({room.members?.length || 0})</div>
+                            <div className="text-xs font-black text-black uppercase tracking-wider mb-2 px-2 pt-1 border-b-2 border-black pb-1">Members ({room.members?.length || 0})</div>
                             <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar p-1">
                               {room.members?.map(mId => {
                                 const u = usersCache[mId];
                                 return (
-                                  <div key={mId} className="flex items-center gap-3 p-2 hover:bg-[#c4ff4d] brutal-border transition-colors cursor-default">
+                                  <div key={mId} className="flex items-center gap-3 p-2 hover:bg-[#7bf1a8] brutal-border transition-colors cursor-default">
                                     {u?.photoURL ? (
-                                      <img src={u.photoURL} alt="avatar" className="w-6 h-6 brutal-border object-cover" />
+                                      <img src={u.photoURL} alt="avatar" className="w-6 h-6 object-cover" />
                                     ) : (
-                                      <div className="w-6 h-6 brutal-border bg-[#ffb4d4] text-black flex items-center justify-center text-[10px] font-black">
+                                      <div className="w-6 h-6 bg-[#ff90e8] text-black flex items-center justify-center text-[10px] font-black">
                                         {u?.displayName?.charAt(0).toUpperCase() || '?'}
                                       </div>
                                     )}
@@ -332,7 +324,7 @@ export default function Dashboard() {
           </div>
 
           {/* Columns 2 & 3: Main Stage (Roadmap Timeline) */}
-          <div className="col-span-1 lg:col-span-2 flex flex-col h-[calc(100vh-160px)] min-h-0">
+          <div className="col-span-1 lg:col-span-2 flex flex-col overflow-y-auto custom-scrollbar pr-2 min-h-0">
             {selectedRoom ? (
                <RoadmapTimeline 
                  roomId={selectedRoom.id} 
@@ -343,7 +335,7 @@ export default function Dashboard() {
               <div className="flex flex-col items-center justify-center h-full bg-white brutal-border brutal-shadow-lg p-12 text-center relative overflow-hidden">
                 {/* Background Pattern */}
                 <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(#000 2px, transparent 2px)", backgroundSize: "20px 20px" }}></div>
-                <div className="w-20 h-20 bg-[#ffe800] brutal-border flex items-center justify-center mb-6 brutal-shadow-sm transform rotate-3">
+                <div className="w-20 h-20 bg-[#ffd93d] brutal-border flex items-center justify-center mb-6 brutal-shadow-sm transform rotate-3">
                   <MousePointerClick className="w-10 h-10 text-black" strokeWidth={2.5} />
                 </div>
                 <h2 className="text-3xl font-black text-black mb-3 tracking-tight uppercase">Select a room</h2>
@@ -355,20 +347,20 @@ export default function Dashboard() {
           {/* Column 4: Activity & Widgets */}
           <div className="col-span-1 space-y-8 overflow-y-auto pr-2 custom-scrollbar pb-10">
             <div>
-              <h2 className="text-xl font-bitcount font-black uppercase tracking-widest text-black mb-6 flex items-center gap-3 bg-[#ffb4d4] border-[3px] border-black p-2 brutal-shadow-sm self-start inline-flex">
+              <h2 className="text-xl font-bitcount font-black uppercase tracking-widest text-black mb-6 flex items-center gap-3 bg-[#ff90e8] border-4 border-black p-2 brutal-shadow-sm self-start inline-flex">
                 <TrendingUp className="w-5 h-5 text-black" strokeWidth={3} />
                 Activity
               </h2>
               <div className="p-6 bg-white brutal-border brutal-shadow-lg relative overflow-hidden">
-                <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#94dfff] rounded-full blur-2xl opacity-50 z-0"></div>
+                <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#5ce1e6] rounded-full blur-2xl opacity-50 z-0"></div>
                 <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-6 border-b-[3px] border-black pb-4">
+                  <div className="flex items-center justify-between mb-6 border-b-4 border-black pb-4">
                     <h3 className="text-lg font-black text-black tracking-wide uppercase">{format(currentMonth, "MMMM yyyy")}</h3>
                     <div className="flex gap-2">
-                      <button onClick={handlePreviousMonth} className="p-1.5 brutal-border bg-white hover:bg-[#ffe800] text-black transition-colors brutal-shadow-sm active:brutal-shadow-none">
+                      <button onClick={handlePreviousMonth} className="p-1.5 brutal-border bg-white hover:bg-[#ffd93d] text-black transition-colors brutal-shadow-sm active:brutal-shadow-none">
                         <ChevronLeft className="w-5 h-5" strokeWidth={3} />
                       </button>
-                      <button onClick={handleNextMonth} className="p-1.5 brutal-border bg-white hover:bg-[#ffe800] text-black transition-colors brutal-shadow-sm active:brutal-shadow-none">
+                      <button onClick={handleNextMonth} className="p-1.5 brutal-border bg-white hover:bg-[#ffd93d] text-black transition-colors brutal-shadow-sm active:brutal-shadow-none">
                         <ChevronRight className="w-5 h-5" strokeWidth={3} />
                       </button>
                     </div>
@@ -382,7 +374,7 @@ export default function Dashboard() {
                     ))}
                     
                     {Array.from({ length: calendarDays[0].date.getDay() }).map((_, i) => (
-                      <div key={`empty-${i}`} className="aspect-square border-[2px] border-dashed border-black/10"></div>
+                      <div key={`empty-${i}`} className="aspect-square border-2 border-dashed border-black/10"></div>
                     ))}
                     
                     {calendarDays.map((day, i) => {
@@ -391,9 +383,9 @@ export default function Dashboard() {
                         <div 
                           key={i} 
                           className={`aspect-square flex items-center justify-center text-sm font-black transition-all duration-150 brutal-border
-                            ${day.isToday ? 'bg-[#ffe800] text-black' : 'text-black bg-white'}
+                            ${day.isToday ? 'bg-[#ffd93d] text-black' : 'text-black bg-white'}
                             ${day.hasActivity 
-                              ? 'bg-[#c4ff4d] text-black brutal-shadow scale-[1.05] z-10' 
+                              ? 'bg-[#7bf1a8] text-black brutal-shadow scale-[1.05] z-10' 
                               : 'hover:bg-black hover:text-white cursor-pointer shadow-none'
                             }
                             ${!day.hasActivity && isPast ? 'opacity-30' : ''}
@@ -411,13 +403,13 @@ export default function Dashboard() {
 
             <div>
               <div className="p-6 bg-white brutal-border brutal-shadow-lg relative">
-                <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-[#ff9c9c] rounded-full blur-2xl opacity-50 z-0"></div>
+                <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-[#c084fc] rounded-full blur-2xl opacity-50 z-0"></div>
                 <div className="relative z-10">
-                  <h3 className="text-lg font-bitcount font-black uppercase text-black mb-6 tracking-widest border-b-[3px] border-black pb-3">Deadlines</h3>
+                  <h3 className="text-lg font-bitcount font-black uppercase text-black mb-6 tracking-widest border-b-4 border-black pb-3">Deadlines</h3>
                   <div className="space-y-4">
                     {displayDeadlines.length > 0 ? (
                        displayDeadlines.map((deadline: any, idx) => (
-                         <div key={idx} className={`flex items-start gap-4 p-3 brutal-border ${deadline.isOverdue ? 'bg-[#ff9c9c]' : 'bg-[#94dfff]'}`}>
+                         <div key={idx} className={`flex items-start gap-4 p-3 brutal-border ${deadline.isOverdue ? 'bg-[#c084fc]' : 'bg-[#5ce1e6]'}`}>
                            <div className="w-10 h-10 brutal-border bg-white flex items-center justify-center shrink-0">
                              <Clock className={`w-5 h-5 ${deadline.isOverdue ? 'text-black' : 'text-black'}`} strokeWidth={3} />
                            </div>
@@ -431,7 +423,7 @@ export default function Dashboard() {
                        ))
                     ) : (
                       <div className="flex flex-col items-center justify-center py-8 text-center brutal-border bg-white border-dashed">
-                        <div className="w-12 h-12 bg-[#ffe800] brutal-border flex items-center justify-center mb-3">
+                        <div className="w-12 h-12 bg-[#ffd93d] brutal-border flex items-center justify-center mb-3">
                           <Calendar className="w-6 h-6 text-black" strokeWidth={2.5} />
                         </div>
                         <p className="text-sm font-black text-black uppercase">No immediate deadlines</p>

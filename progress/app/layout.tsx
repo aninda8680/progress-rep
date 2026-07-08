@@ -37,7 +37,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&family=Commissioner:wght@100..900&display=swap" rel="stylesheet" />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground font-sans selection:bg-[#ffb4d4]">
+      <body className="min-h-full flex flex-col bg-transparent text-foreground font-sans selection:bg-[#ff90e8]">
         <AuthProvider>
           <ThemeProvider
             attribute="class"
@@ -50,12 +50,12 @@ export default function RootLayout({
               position="bottom-right"
               toastOptions={{
                 style: {
-                  background: '#ffffff',
-                  color: '#000000',
-                  border: '3px solid #000000',
-                  boxShadow: '4px 4px 0px 0px #000000',
+                  background: 'var(--background)',
+                  color: 'var(--foreground)',
+                  border: '4px solid var(--foreground)',
+                  boxShadow: '4px 4px 0px 0px var(--shadow)',
                   borderRadius: '0px',
-                  fontWeight: '600',
+                  fontWeight: '900',
                 },
               }}
             />

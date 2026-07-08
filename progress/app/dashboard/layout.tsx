@@ -33,8 +33,8 @@ export default function DashboardLayout({
 
   if (loading || !user) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="w-12 h-12 brutal-border rounded-full border-t-[#ffe800] animate-spin"></div>
+      <div className="flex items-center justify-center min-h-screen bg-transparent">
+        <div className="w-12 h-12 brutal-border rounded-full border-t-[#ffd93d] animate-spin"></div>
       </div>
     );
   }
@@ -45,12 +45,12 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="flex h-screen bg-background text-foreground font-sans selection:bg-[#ffb4d4]">
+    <div className="flex h-[125vh] bg-transparent text-foreground font-sans selection:bg-[#ff90e8]">
       {/* Sidebar */}
-      <aside className="w-64 border-r-[4px] border-black bg-white flex flex-col hidden md:flex z-20 brutal-shadow-lg relative">
-        <div className="p-6 border-b-[4px] border-black flex items-center gap-3 bg-[#ffe800]">
+      <aside className="w-64 border-r-4 border-black bg-white flex flex-col hidden md:flex z-20 brutal-shadow-lg relative">
+        <div className="p-6 border-b-4 border-black flex items-center gap-3 bg-[#ffd93d]">
           <div className="w-8 h-8 brutal-border bg-black flex items-center justify-center transform rotate-6">
-            <div className="w-3 h-3 bg-[#ffe800] rounded-none"></div>
+            <div className="w-3 h-3 bg-[#ffd93d] rounded-none"></div>
           </div>
           <span className="font-bold text-xl tracking-tight uppercase font-bitcount">Portline</span>
         </div>
@@ -61,7 +61,7 @@ export default function DashboardLayout({
             <div className="space-y-3">
               <button 
                 onClick={() => setIsCreateModalOpen(true)}
-                className="w-full flex items-center gap-3 px-3 py-3 bg-[#c4ff4d] text-black font-black uppercase tracking-wide brutal-btn"
+                className="w-full flex items-center gap-3 px-3 py-3 bg-[#7bf1a8] text-black font-black uppercase tracking-wide brutal-btn"
               >
                 <Plus className="w-5 h-5" strokeWidth={3} />
                 Create Room
@@ -83,8 +83,8 @@ export default function DashboardLayout({
                 href="/dashboard"
                 className={`flex items-center gap-3 px-3 py-3 font-black transition-all uppercase tracking-wide ${
                   pathname === "/dashboard" 
-                    ? "bg-[#ffb4d4] text-black brutal-border brutal-shadow-sm translate-x-1" 
-                    : "text-black hover:bg-[#ffb4d4]/30 hover:translate-x-1 brutal-border border-transparent hover:border-black"
+                    ? "bg-[#ff90e8] text-black brutal-border brutal-shadow-sm translate-x-1" 
+                    : "text-black hover:bg-[#ff90e8]/30 hover:translate-x-1 brutal-border border-transparent hover:border-black"
                 }`}
               >
                 <LayoutDashboard className="w-5 h-5" strokeWidth={3} />
@@ -94,8 +94,8 @@ export default function DashboardLayout({
                 href="/dashboard/settings"
                 className={`flex items-center gap-3 px-3 py-3 font-black transition-all uppercase tracking-wide ${
                   pathname === "/dashboard/settings" 
-                    ? "bg-[#ffb4d4] text-black brutal-border brutal-shadow-sm translate-x-1" 
-                    : "text-black hover:bg-[#ffb4d4]/30 hover:translate-x-1 brutal-border border-transparent hover:border-black"
+                    ? "bg-[#ff90e8] text-black brutal-border brutal-shadow-sm translate-x-1" 
+                    : "text-black hover:bg-[#ff90e8]/30 hover:translate-x-1 brutal-border border-transparent hover:border-black"
                 }`}
               >
                 <Settings className="w-5 h-5" strokeWidth={3} />
@@ -105,7 +105,7 @@ export default function DashboardLayout({
           </div>
         </div>
 
-        <div className="p-4 border-t-[4px] border-black bg-[#94dfff]">
+        <div className="p-4 border-t-4 border-black bg-[#5ce1e6]">
           <div className="flex items-center gap-3 mb-4 px-2">
             {user.photoURL ? (
               <img src={user.photoURL} alt="Profile" className="w-10 h-10 brutal-border bg-white" />
@@ -130,19 +130,19 @@ export default function DashboardLayout({
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden bg-background relative z-10">
+      <main className="flex-1 flex flex-col overflow-hidden bg-transparent relative z-10">
         {/* Mobile Header */}
-        <header className="md:hidden flex items-center justify-between p-4 border-b-[4px] border-black bg-[#ffe800] brutal-shadow-sm relative z-20">
+        <header className="md:hidden flex items-center justify-between p-4 border-b-4 border-black bg-[#ffd93d] brutal-shadow-sm relative z-20">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 brutal-border bg-black flex items-center justify-center transform rotate-6">
-              <div className="w-3 h-3 bg-[#ffe800] rounded-none"></div>
+              <div className="w-3 h-3 bg-[#ffd93d] rounded-none"></div>
             </div>
             <span className="font-bold text-lg tracking-tight uppercase font-bitcount">Portline</span>
           </div>
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setIsCreateModalOpen(true)}
-              className="p-2 bg-[#c4ff4d] brutal-btn"
+              className="p-2 bg-[#7bf1a8] brutal-btn"
             >
               <Plus className="w-5 h-5 text-black" strokeWidth={3} />
             </button>
