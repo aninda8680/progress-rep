@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Codepanti 🚀
 
-## Getting Started
+Codepanti is a collaborative, multiplayer-first learning platform built specifically for ambitious developers. Instead of learning in isolation, Codepanti transforms studying into a team sport by allowing you to form study groups, follow structured curriculums together, and track everyone's progress in real-time.
 
-First, run the development server:
+## What Codepanti Does
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+At its core, Codepanti is about accountability and shared growth. It provides curated learning roadmaps and the infrastructure to tackle them as a team. Whether you are preparing for technical interviews or learning a new framework, Codepanti keeps you and your friends synced and motivated.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Core Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Squad Up (Up to 4 Players):** Form small, focused study groups of up to 4 members. Create a private room, invite your friends, and tackle learning challenges as a dedicated squad.
+- **Real-Time Progress Tracking:** See exactly where your teammates are in their journey. When a squad member completes a topic, the update is broadcasted instantly to everyone in the room. 
+- **Compete & Motivate:** Turn learning into a friendly competition. Watch your peers check off tasks and earn achievements, using their momentum to drive you to keep up and push further.
+- **Activity Heatmaps:** Visualize your team's consistency. Codepanti features GitHub-style contribution graphs for each member, mapped directly to their actual progress on the curriculum.
+- **Structured Roadmaps:** No more guessing what to learn next. Codepanti comes with built-in, day-by-day curriculums for Data Structures and Algorithms (DSA), App Development (Flutter), and Python.
+- **Multiplayer First:** Built from the ground up for teams. See exactly who completed what, and when, inside your secure study enclave.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## The Tech Behind Codepanti
 
-## Learn More
+Codepanti is designed with a striking Neo-Brutalist aesthetic (deep colors, high contrast, bold typography) and engineered for real-time collaboration.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Frontend:** Next.js (App Router), React, Tailwind CSS
+- **Backend & Real-time Sync:** Firebase (Firestore, Authentication)
+- **UI & Animations:** Lucide React, Framer Motion
