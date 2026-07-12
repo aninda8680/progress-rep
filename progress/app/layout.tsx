@@ -17,8 +17,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "codepanti Learning",
+  title: "Codepanti",
   description: "Collaborative learning platform",
+  icons: {
+    icon: "/codepanti.png",
+  },
 };
 
 export default function RootLayout({
